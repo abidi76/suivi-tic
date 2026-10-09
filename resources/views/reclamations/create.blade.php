@@ -1,51 +1,86 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Signaler une nouvelle panne ou réclamation TIC') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <form action="{{ route('reclamations.store') }}" method="POST">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Titre de la panne / Problème</label>
-                        <input type="text" name="titre" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Ex: Connexion Internet instable au labo info">
-                        @error('titre') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Équipement concerné (optionnel)</label>
-                        <input type="text" name="equipement" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Ex: Routeur principal / PC Prof N°4">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Niveau de priorité</label>
-                        <select name="priorite" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            <option value="faible">Faible</option>
-                            <option value="moyenne" selected>Moyenne</option>
-                            <option value="haute">Haute</option>
-                            <option value="critique">Critique (Urgence)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Description détaillée</label>
-                        <textarea name="description" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Décrivez précisément le dysfonctionnement constaté..."></textarea>
-                        @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="flex justify-end space-x-3">
-                        <a href="{{ route('reclamations.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm">Annuler</a>
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm">Envoyer la réclamation</center>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+@section('content')
+<div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Nouvelle Réclamation IT</h1>
+        <p class="text-sm text-gray-500 mt-1">Centre Régional d'Éducation (CRE) Manouba — SD TIC</p>
     </div>
-</x-app-layout>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        <form action="{{ route('reclamations.store') }}" method="POST" class="space-y-6">
+            @csrf
+
+            <!-- Établissement Cible Groupé par Délégation -->
+            <div>
+                <label class="block font-semibold text-xs text-gray-600 uppercase tracking-wider mb-2">Établissement Demandeur</label>
+                <select name="etablissement" class="w-full border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all" required>
+                    <option value="">-- Sélectionner un établissement --</option>
+                    
+                    <optgroup label="Délégation de Manouba">
+                        <option value="Lycée Ibn Khaldoun Manouba">Lycée Ibn Khaldoun Manouba</option>
+                        <option value="Collège Exemple Manouba">Collège Exemple Manouba</option>
+                        <option value="Collège ibn abi dhiaf la manouba">Collège Ibn Abi Dhiaf</option>
+                    </optgroup>
+
+                    <optgroup label="Délégation de Oued Ellil">
+                        <option value="École Préparatoire Oued Ellil">École Préparatoire Oued Ellil</option>
+                    </optgroup>
+
+                    <optgroup label="Délégation de Tebourba">
+                        <option value="Lycée Tébourba">Lycée Tébourba</option>
+                        <option value="Lycée Chouigui">Lycée Chouigui</option>
+                    </optgroup>
+
+                    <optgroup label="Délégation de Menzel Habib">
+                        <option value="Lycée Menzel Habib">Lycée Menzel Habib</option>
+                    </optgroup>
+
+                    <optgroup label="Délégation de Borj El Amri">
+                        <option value="Collège Borj El Amri">Collège Borj El Amri</option>
+                    </optgroup>
+
+                    <optgroup label="Délégation de Denden">
+                        <option value="Lycée Denden">Lycée Denden</option>
+                    </optgroup>
+
+                    <optgroup label="Administration Régionale">
+                        <option value="Direction Régionale de l'Éducation Manouba">Direction Régionale de l'Éducation Manouba</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Objet / Problème -->
+            <div>
+                <label class="block font-semibold text-xs text-gray-600 uppercase tracking-wider mb-2">Objet de la Réclamation</label>
+                <input type="text" name="objet" value="{{ old('objet') }}" placeholder="Ex: Panne réseau, Problème vidéoprojecteur..." class="w-full border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all" required>
+            </div>
+
+            <!-- Description détaillée -->
+            <div>
+                <label class="block font-semibold text-xs text-gray-600 uppercase tracking-wider mb-2">Description Détaillée</label>
+                <textarea name="description" rows="4" placeholder="Précisez les détails techniques du problème..." class="w-full border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all" required>{{ old('description') }}</textarea>
+            </div>
+
+            <!-- Statut -->
+            <div>
+                <label class="block font-semibold text-xs text-gray-600 uppercase tracking-wider mb-2">Statut</label>
+                <select name="statut" class="w-full border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                    <option value="Nouvelle">Nouvelle</option>
+                    <option value="En cours">En cours</option>
+                    <option value="Résolue">Résolue</option>
+                </select>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100">
+                <a href="{{ route('reclamations.index') }}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-xl transition-all">
+                    Annuler
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-lg shadow-indigo-100 transition-all">
+                    Enregistrer la Réclamation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

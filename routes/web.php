@@ -3,6 +3,16 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReclamationController;
+use App\Http\Controllers\OrdreMissionController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('ordres-mission', OrdreMissionController::class);
+    Route::get('ordres-mission/{ordres_mission}/imprimer', [OrdreMissionController::class, 'imprimer'])->name('ordres-mission.imprimer');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('ordres-mission', OrdreMissionController::class);
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/reclamations', [ReclamationController::class, 'index'])->name('reclamations.index');
